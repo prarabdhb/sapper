@@ -376,10 +376,10 @@ export function get_page_handler(
 				styles = (css && css.code ? `<style${nonce_attr}>${css.code}</style>` : '');
 			}
 
-			if(atomizerFunction){
-				const criticalCss = atomizerFunction(html);
-				console.log(styles);
-				console.log(criticalCss);
+			let criticalCss = "";
+			if (atomizerFunction) {
+				const criticalCssContent = atomizerFunction(html) || "";
+				criticalCss = criticalCssContent ? `<style>${criticalCssContent}</style>` : "";
 			}
 
 			const body = template()
@@ -387,7 +387,7 @@ export function get_page_handler(
 				.replace('%sapper.scripts%', () => `<script${nonce_attr}>${script}</script>`)
 				.replace('%sapper.html%', () => html)
 				.replace('%sapper.head%', () => head)
-				.replace('%sapper.styles%', () => styles)
+				.replace('%sapper.styles%', () => `${styles}${criticalCss}`)
 				.replace(/%sapper\.cspnonce%/g, () => nonce_value);
 
 			res.statusCode = status;
