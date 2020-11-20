@@ -9,9 +9,10 @@ type IgnoreValue = IgnoreValue[] | RegExp | ((uri: string) => boolean) | string;
 
 export default function middleware(opts: {
 	session?: (req: SapperRequest, res: SapperResponse) => any,
-	ignore?: IgnoreValue
+	ignore?: IgnoreValue,
+	atomizerFunction? : () => any
 } = {}) {
-	const { session, ignore } = opts;
+	const { session, ignore, atomizerFunction } = opts;
 
 	let emitted_basepath = false;
 
@@ -62,7 +63,7 @@ export default function middleware(opts: {
 
 		get_server_route_handler(manifest.server_routes),
 
-		get_page_handler(manifest, session || noop)
+		get_page_handler(manifest, session || noop, atomizerFunction)
 	].filter(Boolean));
 }
 

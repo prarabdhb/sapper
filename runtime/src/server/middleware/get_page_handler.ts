@@ -21,7 +21,8 @@ import detectClientOnlyReferences from './detect_client_only_references';
 
 export function get_page_handler(
 	manifest: Manifest,
-	session_getter: (req: SapperRequest, res: SapperResponse) => Promise<any>
+	session_getter: (req: SapperRequest, res: SapperResponse) => Promise<any>,
+	atomizerFunction? : () => void
 ) {
 	const get_build_info = dev
 		? () => JSON.parse(fs.readFileSync(path.join(build_dir, 'build.json'), 'utf-8'))
@@ -373,6 +374,10 @@ export function get_page_handler(
 					.join('');
 			} else {
 				styles = (css && css.code ? `<style${nonce_attr}>${css.code}</style>` : '');
+			}
+
+			if(atomizerFunction){
+				atomizerFunction();
 			}
 
 			const body = template()
