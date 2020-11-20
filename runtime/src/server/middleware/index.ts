@@ -10,7 +10,7 @@ type IgnoreValue = IgnoreValue[] | RegExp | ((uri: string) => boolean) | string;
 export default function middleware(opts: {
 	session?: (req: SapperRequest, res: SapperResponse) => any,
 	ignore?: IgnoreValue,
-	atomizerFunction? : () => any
+	atomizerFunction? : (htmlContent: String) => String
 } = {}) {
 	const { session, ignore, atomizerFunction } = opts;
 

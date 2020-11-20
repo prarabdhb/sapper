@@ -22,7 +22,7 @@ import detectClientOnlyReferences from './detect_client_only_references';
 export function get_page_handler(
 	manifest: Manifest,
 	session_getter: (req: SapperRequest, res: SapperResponse) => Promise<any>,
-	atomizerFunction? : () => void
+	atomizerFunction? : (htmlContent: String) => String
 ) {
 	const get_build_info = dev
 		? () => JSON.parse(fs.readFileSync(path.join(build_dir, 'build.json'), 'utf-8'))
@@ -377,7 +377,9 @@ export function get_page_handler(
 			}
 
 			if(atomizerFunction){
-				atomizerFunction();
+				const criticalCss = atomizerFunction(html);
+				console.log(styles);
+				console.log(criticalCss);
 			}
 
 			const body = template()
